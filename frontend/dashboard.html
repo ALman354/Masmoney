@@ -1,424 +1,229 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard Keuangan</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>MasMoney</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
-  <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
-      font-family:'Poppins',sans-serif;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    body{
-      background:#0f172a;
-      color:white;
-      min-height:100vh;
-      padding:25px;
-    }
+<link rel="stylesheet" href="dashboard.css">
 
-    .container{
-      max-width:1300px;
-      margin:auto;
-    }
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    .topbar{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:30px;
-      flex-wrap:wrap;
-      gap:20px;
-    }
-
-    .title h1{
-      font-size:32px;
-      font-weight:700;
-    }
-
-    .title p{
-      color:#94a3b8;
-      margin-top:5px;
-    }
-
-    .profile{
-      background:#1e293b;
-      padding:12px 18px;
-      border-radius:15px;
-      display:flex;
-      align-items:center;
-      gap:12px;
-    }
-
-    .profile img{
-      width:45px;
-      height:45px;
-      border-radius:50%;
-      object-fit:cover;
-    }
-
-    .cards{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:20px;
-      margin-bottom:30px;
-    }
-
-    .card{
-      background:#1e293b;
-      border-radius:22px;
-      padding:25px;
-      position:relative;
-      overflow:hidden;
-      transition:.3s;
-    }
-
-    .card:hover{
-      transform:translateY(-5px);
-    }
-
-    .card h3{
-      color:#cbd5e1;
-      font-size:15px;
-      margin-bottom:15px;
-    }
-
-    .card h1{
-      font-size:32px;
-      margin-bottom:10px;
-    }
-
-    .income{
-      border-left:6px solid #22c55e;
-    }
-
-    .expense{
-      border-left:6px solid #ef4444;
-    }
-
-    .balance{
-      border-left:6px solid #3b82f6;
-    }
-
-    .transaction{
-      border-left:6px solid #f59e0b;
-    }
-
-    .main-grid{
-      display:grid;
-      grid-template-columns:2fr 1fr;
-      gap:25px;
-    }
-
-    .chart-box,
-    .history-box{
-      background:#1e293b;
-      border-radius:22px;
-      padding:25px;
-    }
-
-    .section-title{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:20px;
-    }
-
-    .section-title h2{
-      font-size:22px;
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-    }
-
-    th{
-      text-align:left;
-      color:#94a3b8;
-      font-size:14px;
-      padding-bottom:15px;
-    }
-
-    td{
-      padding:14px 0;
-      border-bottom:1px solid rgba(255,255,255,.08);
-    }
-
-    .minus{
-      color:#ef4444;
-      font-weight:600;
-    }
-
-    .plus{
-      color:#22c55e;
-      font-weight:600;
-    }
-
-    .status{
-      padding:6px 12px;
-      border-radius:999px;
-      font-size:12px;
-      display:inline-block;
-    }
-
-    .success{
-      background:#14532d;
-      color:#4ade80;
-    }
-
-    .pending{
-      background:#78350f;
-      color:#facc15;
-    }
-
-    .history-item{
-      background:#0f172a;
-      padding:15px;
-      border-radius:15px;
-      margin-bottom:15px;
-    }
-
-    .history-item h4{
-      margin-bottom:6px;
-    }
-
-    .history-item p{
-      color:#94a3b8;
-      font-size:14px;
-    }
-
-    .btn{
-      margin-top:20px;
-      width:100%;
-      padding:14px;
-      border:none;
-      border-radius:14px;
-      background:#3b82f6;
-      color:white;
-      font-size:15px;
-      cursor:pointer;
-      transition:.3s;
-    }
-
-    .btn:hover{
-      background:#2563eb;
-    }
-
-    @media(max-width:900px){
-
-      .main-grid{
-        grid-template-columns:1fr;
-      }
-
-      .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-
-    }
-
-  </style>
 </head>
+
 <body>
 
 <div class="container">
 
-  <div class="topbar">
+<div class="topbar">
 
-    <div class="title">
-      <h1>Dashboard Keuangan</h1>
-      <p>Pantau pemasukan & pengeluaran otomatis</p>
-    </div>
+<div>
 
-    <div class="profile">
-      <img src="https://i.pravatar.cc/100" alt="">
-      <div>
-        <h4>Yusron</h4>
-        <small>Mandiri Finance</small>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="cards">
-
-    <div class="card balance">
-      <h3>Total Saldo</h3>
-      <h1>Rp 5.250.000</h1>
-      <p>Saldo seluruh rekening</p>
-    </div>
-
-    <div class="card income">
-      <h3>Pemasukan</h3>
-      <h1>Rp 8.500.000</h1>
-      <p>Bulan ini</p>
-    </div>
-
-    <div class="card expense">
-      <h3>Pengeluaran</h3>
-      <h1>Rp 3.250.000</h1>
-      <p>Bulan ini</p>
-    </div>
-
-    <div class="card transaction">
-      <h3>Total Transaksi</h3>
-      <h1>154</h1>
-      <p>Seluruh aktivitas</p>
-    </div>
-
-  </div>
-
-  <div class="main-grid">
-
-    <div class="chart-box">
-
-      <div class="section-title">
-        <h2>Statistik Keuangan</h2>
-      </div>
-
-      <canvas id="financeChart"></canvas>
-
-      <table>
-
-        <thead>
-          <tr>
-            <th>Tanggal</th>
-            <th>Keterangan</th>
-            <th>Status</th>
-            <th>Nominal</th>
-          </tr>
-        </thead>
-
-        <tbody>
-
-          <tr>
-            <td>16 Mei</td>
-            <td>Belanja Indomaret</td>
-            <td>
-              <span class="status success">Berhasil</span>
-            </td>
-            <td class="minus">- Rp 25.000</td>
-          </tr>
-
-          <tr>
-            <td>15 Mei</td>
-            <td>Transfer Gaji</td>
-            <td>
-              <span class="status success">Masuk</span>
-            </td>
-            <td class="plus">+ Rp 2.000.000</td>
-          </tr>
-
-          <tr>
-            <td>14 Mei</td>
-            <td>Top Up E-wallet</td>
-            <td>
-              <span class="status pending">Pending</span>
-            </td>
-            <td class="minus">- Rp 100.000</td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
-    </div>
-
-    <div class="history-box">
-
-      <div class="section-title">
-        <h2>Aktivitas</h2>
-      </div>
-
-      <div class="history-item">
-        <h4>QRIS Payment</h4>
-        <p>Rp 45.000 • Coffee Shop</p>
-      </div>
-
-      <div class="history-item">
-        <h4>Transfer Masuk</h4>
-        <p>Rp 500.000 • Dari Ahmad</p>
-      </div>
-
-      <div class="history-item">
-        <h4>Belanja Online</h4>
-        <p>Rp 120.000 • Marketplace</p>
-      </div>
-
-      <button class="btn">
-        Export Excel
-      </button>
-
-    </div>
-
-  </div>
+<h1>MasMoney 💰</h1>
+<p>Kelola keuangan dengan mudah</p>
 
 </div>
 
-<script>
+<div class="profile">
 
-const ctx = document.getElementById('financeChart');
+<img src="https://i.pravatar.cc/100">
 
-new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-        datasets: [
-        {
-            label: 'Pemasukan',
-            data: [500000, 700000, 400000, 900000, 800000, 650000, 1000000],
-            borderWidth: 3,
-            tension: .4
-        },
-        {
-            label: 'Pengeluaran',
-            data: [300000, 250000, 500000, 200000, 450000, 350000, 400000],
-            borderWidth: 3,
-            tension: .4
-        }
-      ]
-    },
+<div>
+<h3>Yusron</h3>
+<small>Finance Dashboard</small>
+</div>
 
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                labels:{
-                    color:'white'
-                }
-            }
-        },
-        scales: {
-            y: {
-                ticks:{
-                    color:'white'
-                },
-                grid:{
-                    color:'rgba(255,255,255,.05)'
-                }
-            },
-            x: {
-                ticks:{
-                    color:'white'
-                },
-                grid:{
-                    color:'rgba(255,255,255,.05)'
-                }
-            }
-        }
-    }
-});
+</div>
 
-</script>
+</div>
+
+
+<div class="cards">
+
+<div class="card balance">
+
+<h3>Total Saldo</h3>
+
+<h1 id="saldo">
+Rp 0
+</h1>
+
+</div>
+
+<div class="card income">
+
+<h3>Pemasukan</h3>
+
+<h1 id="masuk">
+Rp 0
+</h1>
+
+</div>
+
+<div class="card expense">
+
+<h3>Pengeluaran</h3>
+
+<h1 id="keluar">
+Rp 0
+</h1>
+
+</div>
+
+<div class="card transaction">
+
+<h3>Transaksi</h3>
+
+<h1 id="jumlahTransaksi">
+0
+</h1>
+
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>Statistik Keuangan</h2>
+
+<div class="chart-filter">
+  <label for="startDateDaily">Dari:</label>
+  <input id="startDateDaily" type="date">
+  <label for="endDateDaily">Sampai:</label>
+  <input id="endDateDaily" type="date">
+  <button onclick="applyDailyFilter()">Terapkan</button>
+  <button onclick="resetDailyFilter()">Reset</button>
+</div>
+
+<canvas id="financeChart"></canvas>
+
+</div>
+
+<div class="box">
+  <div class="box-header">
+    <h2>Rekap Bulanan</h2>
+  </div>
+  <div class="chart-filter monthly-filter">
+    <label for="monthFrom">Bulan dari:</label>
+    <input id="monthFrom" type="month">
+    <label for="monthTo">sampai:</label>
+    <input id="monthTo" type="month">
+    <button onclick="applyMonthlyFilter()">Terapkan</button>
+    <button onclick="resetMonthlyFilter()">Reset</button>
+  </div>
+  <div class="monthly-recap">
+    <div class="recap-item">
+      <span>Bulan</span>
+      <strong id="rekapBulanDisplay">-</strong>
+    </div>
+    <div class="recap-item">
+      <span>Pemasukan</span>
+      <strong id="rekapMasuk">Rp 0</strong>
+    </div>
+    <div class="recap-item">
+      <span>Pengeluaran</span>
+      <strong id="rekapKeluar">Rp 0</strong>
+    </div>
+  </div>
+  <canvas id="recapChart"></canvas>
+</div>
+
+<div class="grid">
+
+<div class="left">
+
+<div class="box">
+
+<div class="box-header">
+  <h2>Riwayat Transaksi</h2>
+</div>
+
+<div class="table-filter">
+  <label for="startDateTable">Dari:</label>
+  <input id="startDateTable" type="date">
+  <label for="endDateTable">Sampai:</label>
+  <input id="endDateTable" type="date">
+  <label for="limitRecords">Tampilkan:</label>
+  <input id="limitRecords" type="number" min="1" placeholder="Jumlah">
+  <button onclick="applyTableFilter()">Terapkan</button>
+  <button onclick="resetTableFilter()">Reset</button>
+</div>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Tanggal</th>
+<th>Kategori</th>
+<th>Keterangan</th>
+<th>Tipe</th>
+<th>Jumlah</th>
+
+</tr>
+
+</thead>
+
+<tbody id="transaksiData">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+
+<div class="right">
+
+<div class="box">
+
+<h2>Tambah Transaksi</h2>
+
+<input id="kategori" placeholder="Kategori">
+
+<input id="keterangan" placeholder="Keterangan">
+
+<input id="tanggal" type="date" placeholder="Tanggal">
+
+<input id="jumlah" type="number" placeholder="Jumlah">
+
+<select id="tipe">
+
+<option value="Pemasukan">
+Pemasukan
+</option>
+
+<option value="Pengeluaran">
+Pengeluaran
+</option>
+
+</select>
+
+<button onclick="tambahData()" class="btn">
+
+Tambah
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="dashboard.js"></script>
 
 </body>
 </html>

@@ -9,6 +9,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const transaksiRoute=
+require("./routes/transaksi")
+
+app.use(
+    "/transaksi",
+    transaksiRoute
+)
+
 // route test
 app.get("/", (req,res)=>{
     res.json({
