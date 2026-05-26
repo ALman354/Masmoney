@@ -589,3 +589,57 @@ cursor:pointer;
 margin-right:5px;
 
 }
+
+/* Responsive improvements */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-top: 12px;
+  border-radius: 12px;
+}
+
+/* make canvas adapt height better on small screens */
+#financeChart, #recapChart {
+  min-height: 220px;
+  max-height: 420px;
+}
+
+/* scale down typography on smaller screens */
+@media (max-width: 900px) {
+  .topbar h1 { font-size: 1.6rem; }
+  .cards { gap: 14px; }
+  .card h1 { font-size: 2rem; }
+  .box { padding: 20px; }
+}
+
+@media (max-width: 600px) {
+  body { padding: 16px; }
+  .container { max-width: 100%; }
+  .topbar { align-items:center; }
+  .profile img { width:48px; height:48px; }
+  .cards { grid-template-columns: repeat(2, 1fr); }
+  .card h1 { font-size: 1.6rem; }
+  .chart-filter, .table-filter { flex-direction: column; align-items: stretch; }
+  .chart-filter input, .table-filter input, .chart-filter button, .table-filter button { width:100%; }
+  .monthly-recap { grid-template-columns: 1fr; }
+  #financeChart, #recapChart { min-height: 200px; }
+  table, thead, tbody, th, td, tr { display: block; }
+  thead tr { position: absolute; top: -9999px; left: -9999px; }
+  tr { margin: 0 0 12px 0; }
+  td { padding-left: 50%; position: relative; }
+  td:before {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    width: 45%;
+    white-space: nowrap;
+    font-weight: 600;
+    color: rgba(241,245,249,.8);
+  }
+  td:nth-of-type(1):before { content: "Tanggal"; }
+  td:nth-of-type(2):before { content: "Kategori"; }
+  td:nth-of-type(3):before { content: "Keterangan"; }
+  td:nth-of-type(4):before { content: "Tipe"; }
+  td:nth-of-type(5):before { content: "Jumlah"; }
+}
