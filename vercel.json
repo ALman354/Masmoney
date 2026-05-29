@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/frontend/index.html"
+      "destination": "/frontend/dashboard.html"
     },
     {
       "source": "/dashboard.html",
@@ -22,7 +22,7 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/transaksi/:path*",
+      "source": "/transaksi/(.*)",
       "destination": "/api/index.js"
     }
   ]
