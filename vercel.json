@@ -1,29 +1,35 @@
 {
   "version": 2,
-  "rewrites": [
+  "builds": [
     {
-      "source": "/transaksi",
-      "destination": "/api/index.js"
+      "src": "api/index.js",
+      "use": "@vercel/node"
     },
     {
-      "source": "/transaksi/:path*",
-      "destination": "/api/index.js"
+      "src": "frontend/**/*",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/transaksi(?:/|$)(.*)",
+      "dest": "/api/index.js"
     },
     {
-      "source": "/dashboard.css",
-      "destination": "/frontend/dashboard.css"
+      "src": "/dashboard.css",
+      "dest": "/frontend/dashboard.css"
     },
     {
-      "source": "/dashboard.js",
-      "destination": "/frontend/dashboard.js"
+      "src": "/dashboard.js",
+      "dest": "/frontend/dashboard.js"
     },
     {
-      "source": "/dashboard.html",
-      "destination": "/frontend/dashboard.html"
+      "src": "/dashboard.html",
+      "dest": "/frontend/dashboard.html"
     },
     {
-      "source": "/",
-      "destination": "/frontend/dashboard.html"
+      "src": "/",
+      "dest": "/frontend/index.html"
     }
   ]
 }

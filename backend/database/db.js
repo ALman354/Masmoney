@@ -1,6 +1,8 @@
 const { Pool } = require("pg");
 
-const useMemoryFallback = !process.env.DATABASE_URL;
+let useMemoryFallback = !process.env.DATABASE_URL;
+let pgPool = null;
+let pgConnected = false;
 
 const memoryState = {
   nextId: 1,
@@ -157,31 +159,67 @@ function memoryQuery(sql, params = []) {
   return { rows: [] };
 }
 
-const db = useMemoryFallback ? {
-  query: async (sql, params = []) => memoryQuery(sql, params),
+const db = {
+  query: async (sql, params = []) => {
+    if (useMemoryFallback || !pgConnected) {
+      return memoryQuery(sql, params);
+    }
+    try {
+      return await pgPool.query(sql, params);
+    } catch (err) {
+      console.error("Database error, falling back to memory:", err.message);
+      useMemoryFallback = true;
+      pgConnected = false;
+      return memoryQuery(sql, params);
+    }
+  },
   connect: async () => {
-    console.log("Database fallback in-memory aktif");
-    return true;
+    if (useMemoryFallback) {
+      console.log("Database fallback in-memory aktif");
+      return true;
+    }
+    try {
+      pgPool = new Pool({
+        connectionString: process.env.DATABASE_URL,
+        ssl: {
+          rejectUnauthorized: false,
+        },
+      });
+      await pgPool.query("SELECT 1");
+      pgConnected = true;
+      console.log("Database PostgreSQL terhubung");
+      return true;
+    } catch (err) {
+      console.log("Database gagal, menggunakan fallback memory:", err.message);
+      useMemoryFallback = true;
+      pgConnected = false;
+      return true;
+    }
   },
   promise: () => ({
-    query: (sql, params = []) => memoryQuery(sql, params),
+    query: async (sql, params = []) => {
+      if (useMemoryFallback || !pgConnected) {
+        return memoryQuery(sql, params);
+      }
+      try {
+        return await pgPool.query(sql, params);
+      } catch (err) {
+        console.error("Database error, falling back to memory:", err.message);
+        useMemoryFallback = true;
+        pgConnected = false;
+        return memoryQuery(sql, params);
+      }
+    },
   }),
-  end: () => {},
-} : new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
+  end: () => {
+    if (pgPool) {
+      pgPool.end().catch(() => {});
+    }
   },
-});
-
-if (!useMemoryFallback) {
-  db.connect()
-    .then(() => {
-      console.log("Database PostgreSQL terhubung");
-    })
-    .catch((err) => {
-      console.log("Database gagal:", err.message);
-    });
-}
+};
 
 module.exports = db;
+
+(async () => {
+  await db.connect();
+})();
