@@ -2,12 +2,12 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/frontend/dashboard.html"
+      "source": "/transaksi",
+      "destination": "/api/index.js"
     },
     {
-      "source": "/dashboard.html",
-      "destination": "/frontend/dashboard.html"
+      "source": "/transaksi/:path*",
+      "destination": "/api/index.js"
     },
     {
       "source": "/dashboard.css",
@@ -18,12 +18,12 @@
       "destination": "/frontend/dashboard.js"
     },
     {
-      "source": "/transaksi",
-      "destination": "/api/index.js"
+      "source": "/dashboard.html",
+      "destination": "/frontend/dashboard.html"
     },
     {
-      "source": "/transaksi/(.*)",
-      "destination": "/api/index.js"
+      "source": "/",
+      "destination": "/frontend/dashboard.html"
     }
   ]
 }
