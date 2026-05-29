@@ -2,7 +2,27 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/",
+      "destination": "/frontend/index.html"
+    },
+    {
+      "source": "/dashboard.html",
+      "destination": "/frontend/dashboard.html"
+    },
+    {
+      "source": "/dashboard.css",
+      "destination": "/frontend/dashboard.css"
+    },
+    {
+      "source": "/dashboard.js",
+      "destination": "/frontend/dashboard.js"
+    },
+    {
+      "source": "/transaksi",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/transaksi/:path*",
       "destination": "/api/index.js"
     }
   ]

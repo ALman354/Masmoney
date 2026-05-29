@@ -1,4 +1,4 @@
-const api = "http://localhost:3000/transaksi";
+const api = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") ? "http://localhost:3000/transaksi" : "/transaksi";
 let financeChart;
 let recapChart;
 
