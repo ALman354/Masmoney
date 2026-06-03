@@ -1,6 +1,7 @@
 const { Pool } = require("pg");
 
-let useMemoryFallback = !process.env.DATABASE_URL;
+const connectionString = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+let useMemoryFallback = !connectionString;
 let pgPool = null;
 let pgConnected = false;
 
@@ -180,7 +181,7 @@ const db = {
     }
     try {
       pgPool = new Pool({
-        connectionString: process.env.DATABASE_URL,
+        connectionString,
         ssl: {
           rejectUnauthorized: false,
         },
