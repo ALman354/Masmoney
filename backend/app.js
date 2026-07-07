@@ -4,6 +4,7 @@ const path = require("path");
 
 const transaksiRoute = require("./routes/transaksi");
 const authRoute = require("./routes/auth");
+const financeRoute = require("./routes/finance");
 
 const app = express();
 const frontendPath = path.join(__dirname, "..", "frontend");
@@ -18,5 +19,6 @@ app.get("/", (req, res) => {
 
 app.use("/auth", authRoute);
 app.use("/transaksi", transaksiRoute);
+app.use("/finance", financeRoute);
 
 module.exports = app;

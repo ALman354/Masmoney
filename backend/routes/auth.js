@@ -94,4 +94,20 @@ router.get("/me", async (req, res) => {
   }
 });
 
+router.put("/profile", async (req, res) => {
+  try {
+    const header = req.headers.authorization || "";
+    const token = header.startsWith("Bearer ") ? header.slice(7) : "";
+    if (!token) return res.status(401).json({ error: "Token tidak ditemukan." });
+    const payload = jwt.verify(token, JWT_SECRET);
+    const nama = String(req.body.nama || "").trim();
+    if (!nama) return res.status(400).json({ error: "Nama wajib diisi." });
+    const result = await db.query("UPDATE users SET nama = $1 WHERE id = $2 RETURNING id, nama, username", [nama, payload.id]);
+    if (!result.rows[0]) return res.status(404).json({ error: "User tidak ditemukan." });
+    const user = publicUser(result.rows[0]);
+    res.json({ message: "Profil diperbarui", token: createToken(user), user });
+  } catch (err) {
+    res.status(401).json({ error: "Token tidak valid." });
+  }
+});
 module.exports = router;

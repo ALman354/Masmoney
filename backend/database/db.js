@@ -15,9 +15,9 @@ const memoryState = {
     { id: 1, nama: "Yusron", username: "admin", password_hash: demoPasswordHash, created_at: "2026-05-01T08:00:00.000Z" },
   ],
   rows: [
-    { id: 1, user_id: 1, tipe: "masuk", nominal: 5000000, keterangan: "Gaji", created_at: "2026-05-01T08:00:00.000Z" },
-    { id: 2, user_id: 1, tipe: "keluar", nominal: 250000, keterangan: "Belanja", created_at: "2026-05-03T08:00:00.000Z" },
-    { id: 3, user_id: 1, tipe: "masuk", nominal: 1200000, keterangan: "Investasi", created_at: "2026-05-10T08:00:00.000Z" },
+    { id: 1, user_id: 1, tipe: "masuk", nominal: 5000000, kategori: "Gaji", keterangan: "Gaji", created_at: "2026-05-01T08:00:00.000Z" },
+    { id: 2, user_id: 1, tipe: "keluar", nominal: 250000, kategori: "Belanja", keterangan: "Belanja", created_at: "2026-05-03T08:00:00.000Z" },
+    { id: 3, user_id: 1, tipe: "masuk", nominal: 1200000, kategori: "Investasi", keterangan: "Investasi", created_at: "2026-05-10T08:00:00.000Z" },
   ],
 };
 
@@ -110,18 +110,19 @@ function memoryQuery(sql, params = []) {
   }
 
   if (normalizedSql.startsWith("INSERT INTO TRANSAKSI")) {
-    const inserted = { id: memoryState.nextTransactionId++, user_id: Number(params[0]), tipe: params[1], nominal: Number(params[2]), keterangan: params[3], created_at: params[4] };
+    const inserted = { id: memoryState.nextTransactionId++, user_id: Number(params[0]), kategori: params[1], tipe: params[2], nominal: Number(params[3]), keterangan: params[4], created_at: params[5] };
     memoryState.rows.unshift(inserted);
     return { rows: [cloneRow(inserted)] };
   }
 
   if (normalizedSql.startsWith("UPDATE TRANSAKSI")) {
-    const row = memoryState.rows.find((item) => Number(item.id) === Number(params[4]) && Number(item.user_id) === Number(params[5]));
+    const row = memoryState.rows.find((item) => Number(item.id) === Number(params[5]) && Number(item.user_id) === Number(params[6]));
     if (!row) return { rows: [] };
-    row.tipe = params[0];
-    row.nominal = Number(params[1]);
-    row.keterangan = params[2];
-    if (params[3]) row.created_at = params[3];
+    row.kategori = params[0];
+    row.tipe = params[1];
+    row.nominal = Number(params[2]);
+    row.keterangan = params[3];
+    if (params[4]) row.created_at = params[4];
     return { rows: [cloneRow(row)] };
   }
 
@@ -138,6 +139,9 @@ async function initSchema() {
   await pgPool.query(`CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, nama VARCHAR(100) NOT NULL, username VARCHAR(50) UNIQUE NOT NULL, password_hash TEXT NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
   await pgPool.query(`CREATE TABLE IF NOT EXISTS transaksi (id SERIAL PRIMARY KEY, tipe VARCHAR(20) NOT NULL, nominal NUMERIC NOT NULL, keterangan TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
   await pgPool.query(`ALTER TABLE transaksi ADD COLUMN IF NOT EXISTS user_id INTEGER`);
+  await pgPool.query(`ALTER TABLE transaksi ADD COLUMN IF NOT EXISTS kategori VARCHAR(100)`);
+  await pgPool.query(`CREATE TABLE IF NOT EXISTS budgets (id SERIAL PRIMARY KEY, user_id INTEGER REFERENCES users(id) ON DELETE CASCADE, kategori VARCHAR(100) NOT NULL, bulan VARCHAR(7) NOT NULL, limit_amount NUMERIC NOT NULL, UNIQUE(user_id, kategori, bulan))`);
+  await pgPool.query(`CREATE TABLE IF NOT EXISTS goals (id SERIAL PRIMARY KEY, user_id INTEGER REFERENCES users(id) ON DELETE CASCADE, nama VARCHAR(100) NOT NULL, target_amount NUMERIC NOT NULL, current_amount NUMERIC DEFAULT 0, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)`);
 
   const adminHash = bcrypt.hashSync("admin123", 10);
   const adminResult = await pgPool.query(
@@ -150,6 +154,7 @@ async function initSchema() {
     adminId = existing.rows[0]?.id;
   }
   if (adminId) await pgPool.query("UPDATE transaksi SET user_id = $1 WHERE user_id IS NULL", [adminId]);
+  await pgPool.query("UPDATE transaksi SET kategori = COALESCE(NULLIF(kategori, ''), keterangan, 'Lainnya') WHERE kategori IS NULL OR kategori = ''");
   await pgPool.query(`ALTER TABLE transaksi ADD CONSTRAINT transaksi_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE NOT VALID`).catch((err) => {
     if (!String(err.message).includes("already exists")) throw err;
   });

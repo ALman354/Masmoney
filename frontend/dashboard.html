@@ -25,6 +25,7 @@
         <a href="#overview" class="active">Overview</a>
         <a href="#statistik">Statistik</a>
         <a href="#riwayat">Transaksi</a>
+        <a href="#planning">Planning</a>
         <a href="#form-transaksi">Input Data</a>
       </nav>
 
@@ -40,7 +41,7 @@
         <div>
           <span class="eyebrow">Dashboard Keuangan</span>
           <h2>Ringkasan MasMoney</h2>
-          <p>Pantau pemasukan, pengeluaran, dan riwayat transaksi dalam satu tampilan profesional.</p>
+          <p>Pantau pemasukan, pengeluaran, budget, target tabungan, dan insight otomatis dalam satu tampilan profesional.</p>
         </div>
         <div class="profile-card">
           <div class="avatar">Y</div>
@@ -74,7 +75,16 @@
           <small>Jumlah data tampil</small>
         </article>
       </section>
-
+      <section class="panel insight-panel" id="insight-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Insight Otomatis</h2>
+            <p>Ringkasan cerdas berdasarkan transaksi bulan ini.</p>
+          </div>
+          <button class="btn btn-secondary" onclick="refreshInsights()">Refresh</button>
+        </div>
+        <div id="insightList" class="insight-list"></div>
+      </section>
       <section class="content-grid" id="statistik">
         <article class="panel chart-panel">
           <div class="panel-header">
@@ -155,7 +165,35 @@
           <canvas id="recapChart"></canvas>
         </div>
       </section>
-
+      <section class="planning-grid" id="planning">
+        <article class="panel">
+          <div class="panel-header"><div><h2>Budget Bulanan</h2><p>Tentukan batas pengeluaran per kategori.</p></div></div>
+          <div class="form-stack compact-form">
+            <label for="budgetMonth">Bulan</label><input id="budgetMonth" type="month">
+            <label for="budgetKategori">Kategori</label><input id="budgetKategori" placeholder="Makanan">
+            <label for="budgetLimit">Limit</label><input id="budgetLimit" type="number" placeholder="1000000">
+            <button class="btn btn-submit" onclick="saveBudget()">Simpan Budget</button>
+          </div>
+          <div id="budgetList" class="mini-list"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-header"><div><h2>Target Tabungan</h2><p>Pantau progres tujuan keuangan.</p></div></div>
+          <div class="form-stack compact-form">
+            <label for="goalName">Nama Target</label><input id="goalName" placeholder="Laptop baru">
+            <label for="goalTarget">Target</label><input id="goalTarget" type="number" placeholder="8000000">
+            <label for="goalCurrent">Terkumpul</label><input id="goalCurrent" type="number" placeholder="1500000">
+            <button class="btn btn-submit" onclick="saveGoal()">Simpan Target</button>
+          </div>
+          <div id="goalList" class="mini-list"></div>
+        </article>
+        <article class="panel">
+          <div class="panel-header"><div><h2>Profil</h2><p>Perbarui nama tampilan akun.</p></div></div>
+          <div class="form-stack compact-form">
+            <label for="profileNama">Nama</label><input id="profileNama" placeholder="Nama tampilan">
+            <button class="btn btn-submit" onclick="updateProfile()">Simpan Profil</button>
+          </div>
+        </article>
+      </section>
       <section class="panel" id="riwayat">
         <div class="panel-header">
           <div>
@@ -168,10 +206,17 @@
           <input id="startDateTable" type="date">
           <label for="endDateTable">Sampai</label>
           <input id="endDateTable" type="date">
+          <label for="searchRecords">Cari</label>
+          <input id="searchRecords" placeholder="Keterangan/kategori">
+          <label for="categoryFilter">Kategori</label>
+          <select id="categoryFilter"><option value="">Semua</option></select>
+          <label for="typeFilter">Tipe</label>
+          <select id="typeFilter"><option value="">Semua</option><option value="Pemasukan">Pemasukan</option><option value="Pengeluaran">Pengeluaran</option></select>
           <label for="limitRecords">Tampilkan</label>
           <input id="limitRecords" type="number" min="1" placeholder="Jumlah">
           <button class="btn btn-primary" onclick="applyTableFilter()">Terapkan</button>
           <button class="btn btn-secondary" onclick="resetTableFilter()">Reset</button>
+          <button class="btn btn-secondary" onclick="exportCsv()">Export CSV</button>
         </div>
         <div class="table-responsive">
           <table>
@@ -191,6 +236,8 @@
       </section>
     </main>
   </div>
+  <div id="toast" class="toast"></div>
+  <div id="loadingOverlay" class="loading-overlay">Memuat...</div>
 
   <script src="dashboard.js"></script>
 </body>

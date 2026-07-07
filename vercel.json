@@ -6,6 +6,7 @@
   ],
   "routes": [
     { "src": "/auth(?:/|$)(.*)", "dest": "/api/index.js" },
+    { "src": "/finance(?:/|$)(.*)", "dest": "/api/index.js" },
     { "src": "/api/transaksi(?:/|$)(.*)", "dest": "/api/index.js" },
     { "src": "/transaksi(?:/|$)(.*)", "dest": "/api/index.js" },
     { "src": "/dashboard.css", "dest": "/frontend/dashboard.css" },
