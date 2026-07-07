@@ -553,3 +553,21 @@ tbody tr:last-child td {
     height: 260px;
   }
 }
+
+.logout-button {
+  height: 36px;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 0 12px;
+  color: #344054;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.logout-button:hover {
+  color: #fff;
+  background: #dc2626;
+  border-color: #dc2626;
+}

@@ -28,6 +28,14 @@
       "dest": "/frontend/dashboard.js"
     },
     {
+      "src": "/login.css",
+      "dest": "/frontend/login.css"
+    },
+    {
+      "src": "/login.js",
+      "dest": "/frontend/login.js"
+    },
+    {
       "src": "/dashboard.html",
       "dest": "/frontend/dashboard.html"
     },

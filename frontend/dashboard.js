@@ -1,3 +1,23 @@
+const AUTH_KEY = 'masmoney_auth';
+
+if (localStorage.getItem(AUTH_KEY) !== 'true') {
+    window.location.href = 'index.html';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const user = localStorage.getItem('masmoney_user') || 'Yusron';
+    const profileName = document.getElementById('profileName');
+    const logoutButton = document.getElementById('logoutButton');
+
+    if (profileName) profileName.textContent = user;
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            localStorage.removeItem(AUTH_KEY);
+            localStorage.removeItem('masmoney_user');
+            window.location.href = 'index.html';
+        });
+    }
+});
 const api = (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") ? "http://localhost:3000/transaksi" : "/transaksi";
 let financeChart;
 let recapChart;
