@@ -1,19 +1,34 @@
-const AUTH_KEY = 'masmoney_auth';
+const AUTH_TOKEN_KEY = 'masmoney_token';
+const AUTH_USER_KEY = 'masmoney_user';
+const token = localStorage.getItem(AUTH_TOKEN_KEY);
 
-if (localStorage.getItem(AUTH_KEY) !== 'true') {
+if (!token) {
     window.location.href = '/';
 }
 
+function getAuthHeaders(extra = {}) {
+    return { ...extra, Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN_KEY) || ''}` };
+}
+
+function handleUnauthorized(response) {
+    if (response.status === 401) {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        localStorage.removeItem(AUTH_USER_KEY);
+        window.location.href = '/';
+        return true;
+    }
+    return false;
+}
+
 window.addEventListener('DOMContentLoaded', () => {
-    const user = localStorage.getItem('masmoney_user') || 'Yusron';
+    const storedUser = JSON.parse(localStorage.getItem(AUTH_USER_KEY) || '{}');
     const profileName = document.getElementById('profileName');
     const logoutButton = document.getElementById('logoutButton');
-
-    if (profileName) profileName.textContent = user;
+    if (profileName) profileName.textContent = storedUser.nama || storedUser.username || 'User';
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
-            localStorage.removeItem(AUTH_KEY);
-            localStorage.removeItem('masmoney_user');
+            localStorage.removeItem(AUTH_TOKEN_KEY);
+            localStorage.removeItem(AUTH_USER_KEY);
             window.location.href = '/';
         });
     }
@@ -44,7 +59,8 @@ function monthRangeToDates(fromMonth, toMonth) {
 
 async function fetchTransactions(params = {}) {
     const url = api + buildQuery(params);
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: getAuthHeaders() });
+    if (handleUnauthorized(response)) return [];
     return await response.json();
 }
 
@@ -336,7 +352,7 @@ async function tambahData() {
 
     await fetch(api, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
         body: JSON.stringify({ kategori, keterangan, tanggal, jumlah, tipe })
     });
 
@@ -345,7 +361,7 @@ async function tambahData() {
 }
 
 async function hapusData(id) {
-    await fetch(api + '/' + id, { method: 'DELETE' });
+    await fetch(api + '/' + id, { method: 'DELETE', headers: getAuthHeaders() });
     await refreshAllViews();
 }
 
@@ -365,7 +381,7 @@ async function editData(item) {
     tombol.onclick = async () => {
         await fetch(api + '/' + item.id, {
             method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
             body: JSON.stringify({
                 kategori: document.getElementById('kategori').value,
                 keterangan: document.getElementById('keterangan').value,

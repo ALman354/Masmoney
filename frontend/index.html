@@ -12,46 +12,22 @@
 <body>
   <main class="login-page">
     <section class="login-hero">
-      <div class="brand-block">
-        <div class="brand-mark">M</div>
-        <div>
-          <h1>MasMoney</h1>
-          <p>Personal finance dashboard</p>
-        </div>
-      </div>
-      <div class="hero-copy">
-        <span>Kelola uang dengan rapi</span>
-        <h2>Pantau pemasukan, pengeluaran, dan transaksi dari satu dashboard.</h2>
-        <p>Masuk untuk membuka ringkasan keuangan, grafik, rekap bulanan, dan fitur tambah transaksi.</p>
-      </div>
-      <div class="demo-card">
-        <span>Akun demo</span>
-        <strong>admin / admin123</strong>
-      </div>
+      <div class="brand-block"><div class="brand-mark">M</div><div><h1>MasMoney</h1><p>Personal finance dashboard</p></div></div>
+      <div class="hero-copy"><span>Multi User</span><h2>Setiap akun punya data transaksi sendiri.</h2><p>Daftar akun baru atau masuk dengan akun yang sudah ada untuk mengelola data keuangan secara terpisah.</p></div>
+      <div class="demo-card"><span>Akun awal</span><strong>admin / admin123</strong></div>
     </section>
-
     <section class="login-panel" aria-label="Form login">
-      <div class="panel-header">
-        <span class="eyebrow">Masuk Akun</span>
-        <h2>Selamat datang kembali</h2>
-        <p>Gunakan akun demo untuk membuka dashboard MasMoney.</p>
-      </div>
-
+      <div class="panel-header"><span class="eyebrow" id="formModeLabel">Masuk Akun</span><h2 id="formTitle">Selamat datang kembali</h2><p id="formDescription">Masuk untuk membuka dashboard MasMoney.</p></div>
+      <div class="auth-tabs" role="tablist" aria-label="Pilih mode autentikasi"><button type="button" id="loginTab" class="active">Login</button><button type="button" id="registerTab">Daftar</button></div>
       <form id="loginForm" class="login-form">
-        <div class="field-group">
-          <label for="username">Username</label>
-          <input id="username" name="username" type="text" autocomplete="username" placeholder="admin" required>
-        </div>
-        <div class="field-group">
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" autocomplete="current-password" placeholder="admin123" required>
-        </div>
+        <div class="field-group register-only"><label for="nama">Nama</label><input id="nama" name="nama" type="text" autocomplete="name" placeholder="Nama lengkap"></div>
+        <div class="field-group"><label for="username">Username</label><input id="username" name="username" type="text" autocomplete="username" placeholder="admin" required></div>
+        <div class="field-group"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" placeholder="minimal 6 karakter" required></div>
         <div id="loginError" class="login-error" role="alert"></div>
-        <button type="submit" class="login-button">Masuk Dashboard</button>
+        <button type="submit" id="submitButton" class="login-button">Masuk Dashboard</button>
       </form>
     </section>
   </main>
-
   <script src="login.js"></script>
 </body>
 </html>
