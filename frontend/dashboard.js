@@ -75,15 +75,15 @@ function renderTable(data) {
     let pengeluaran = 0;
 
     data.forEach(item => {
+        const tipeClass = item.tipe === 'Pemasukan' ? 'badge-income' : 'badge-expense';
         html += `
 <tr>
 <td>${formatDate(item.created_at)}</td>
 <td>${item.kategori || item.keterangan || ''}</td>
 <td>${item.keterangan || ''}</td>
-<td>${item.tipe}</td>
+<td><span class="badge ${tipeClass}">${item.tipe}</span></td>
 <td>Rp ${Number(item.jumlah).toLocaleString()}</td>
-<td><button onclick='editData(${JSON.stringify(item)})' class="edit">Edit</button></td>
-<td><button onclick="hapusData(${item.id})" class="hapus">Hapus</button></td>
+<td><div class="action-group"><button onclick='editData(${JSON.stringify(item)})' class="edit">Edit</button><button onclick="hapusData(${item.id})" class="hapus">Hapus</button></div></td>
 </tr>`;
 
         if (item.tipe === 'Pemasukan') {
@@ -93,13 +93,15 @@ function renderTable(data) {
         }
     });
 
-    document.getElementById('transaksiData').innerHTML = html;
+    const saldoText = 'Rp ' + (pemasukan - pengeluaran).toLocaleString();
+    document.getElementById('transaksiData').innerHTML = html || '<tr><td colspan="6" class="empty-row">Belum ada transaksi pada filter ini.</td></tr>';
     document.getElementById('masuk').innerHTML = 'Rp ' + pemasukan.toLocaleString();
     document.getElementById('keluar').innerHTML = 'Rp ' + pengeluaran.toLocaleString();
-    document.getElementById('saldo').innerHTML = 'Rp ' + (pemasukan - pengeluaran).toLocaleString();
+    document.getElementById('saldo').innerHTML = saldoText;
+    const saldoCard = document.getElementById('saldoCard');
+    if (saldoCard) saldoCard.innerHTML = saldoText;
     document.getElementById('jumlahTransaksi').innerHTML = data.length;
 }
-
 function renderFinanceChart(dataItems) {
     const dailyTotals = {};
     dataItems.forEach((item) => {
@@ -132,7 +134,7 @@ function renderFinanceChart(dataItems) {
                 fill: true,
                 tension: 0.4,
                 pointRadius: 3,
-                pointBackgroundColor: '#fff',
+                pointBackgroundcolor: '#344054',
                 pointBorderColor: '#38bdf8',
                 borderWidth: 3,
             }]
@@ -143,18 +145,18 @@ function renderFinanceChart(dataItems) {
             plugins: {
                 legend: {
                     display: true,
-                    labels: { color: '#fff' }
+                    labels: { color: '#344054' }
                 },
                 title: {
                     display: true,
                     text: 'Grafik Harian',
-                    color: '#fff',
+                    color: '#344054',
                     font: { size: 16 }
                 }
             },
             scales: {
-                x: { grid: { display: false }, ticks: { color: '#fff' } },
-                y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#fff' } }
+                x: { grid: { display: false }, ticks: { color: '#344054' } },
+                y: { beginAtZero: true, grid: { color: '#e4e7ec' }, ticks: { color: '#344054' } }
             }
         }
     });
@@ -229,18 +231,18 @@ function renderRecapChart(dataItems, selectedMonth) {
             plugins: {
                 legend: {
                     position: 'bottom',
-                    labels: { color: '#fff' }
+                    labels: { color: '#344054' }
                 },
                 title: {
                     display: true,
                     text: 'Grafik Bulanan',
-                    color: '#fff',
+                    color: '#344054',
                     font: { size: 16 }
                 }
             },
             scales: {
-                x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-                y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+                x: { ticks: { color: '#344054' }, grid: { color: '#e4e7ec' } },
+                y: { ticks: { color: '#344054' }, grid: { color: '#e4e7ec' } }
             }
         }
     });

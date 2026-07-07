@@ -1,222 +1,196 @@
 <!DOCTYPE html>
 <html lang="id">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>MasMoney</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="dashboard.css">
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MasMoney</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="dashboard.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-
 <body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand-block">
+        <div class="brand-mark">M</div>
+        <div>
+          <h1>MasMoney</h1>
+          <p>Finance Manager</p>
+        </div>
+      </div>
 
-<div class="container">
+      <nav class="side-nav" aria-label="Navigasi utama">
+        <a href="#overview" class="active">Overview</a>
+        <a href="#statistik">Statistik</a>
+        <a href="#riwayat">Transaksi</a>
+        <a href="#form-transaksi">Input Data</a>
+      </nav>
 
-<div class="topbar">
+      <div class="sidebar-note">
+        <span>Saldo bersih</span>
+        <strong id="saldo">Rp 0</strong>
+        <small>Dihitung dari transaksi yang sedang tampil.</small>
+      </div>
+    </aside>
 
-<div>
+    <main class="main-content">
+      <header class="topbar" id="overview">
+        <div>
+          <span class="eyebrow">Dashboard Keuangan</span>
+          <h2>Ringkasan MasMoney</h2>
+          <p>Pantau pemasukan, pengeluaran, dan riwayat transaksi dalam satu tampilan profesional.</p>
+        </div>
+        <div class="profile-card">
+          <div class="avatar">Y</div>
+          <div>
+            <h3>Yusron</h3>
+            <small>Personal Finance</small>
+          </div>
+        </div>
+      </header>
 
-<h1>MasMoney 💰</h1>
-<p>Kelola keuangan dengan mudah</p>
+      <section class="cards" aria-label="Ringkasan saldo">
+        <article class="metric-card balance">
+          <span>Total Saldo</span>
+          <strong id="saldoCard">Rp 0</strong>
+          <small>Selisih pemasukan dan pengeluaran</small>
+        </article>
+        <article class="metric-card income">
+          <span>Pemasukan</span>
+          <strong id="masuk">Rp 0</strong>
+          <small>Total uang masuk</small>
+        </article>
+        <article class="metric-card expense">
+          <span>Pengeluaran</span>
+          <strong id="keluar">Rp 0</strong>
+          <small>Total uang keluar</small>
+        </article>
+        <article class="metric-card transaction">
+          <span>Transaksi</span>
+          <strong id="jumlahTransaksi">0</strong>
+          <small>Jumlah data tampil</small>
+        </article>
+      </section>
 
-</div>
+      <section class="content-grid" id="statistik">
+        <article class="panel chart-panel">
+          <div class="panel-header">
+            <div>
+              <h2>Statistik Harian</h2>
+              <p>Pergerakan saldo berdasarkan rentang tanggal.</p>
+            </div>
+          </div>
+          <div class="filter-row">
+            <label for="startDateDaily">Dari</label>
+            <input id="startDateDaily" type="date">
+            <label for="endDateDaily">Sampai</label>
+            <input id="endDateDaily" type="date">
+            <button class="btn btn-primary" onclick="applyDailyFilter()">Terapkan</button>
+            <button class="btn btn-secondary" onclick="resetDailyFilter()">Reset</button>
+          </div>
+          <div class="chart-box">
+            <canvas id="financeChart"></canvas>
+          </div>
+        </article>
 
-<div class="profile">
+        <article class="panel form-panel" id="form-transaksi">
+          <div class="panel-header compact">
+            <div>
+              <h2>Tambah Transaksi</h2>
+              <p>Masukkan transaksi baru secara cepat.</p>
+            </div>
+          </div>
+          <div class="form-stack">
+            <label for="kategori">Kategori</label>
+            <input id="kategori" placeholder="Contoh: Gaji, Belanja">
+            <label for="keterangan">Keterangan</label>
+            <input id="keterangan" placeholder="Detail transaksi">
+            <label for="tanggal">Tanggal</label>
+            <input id="tanggal" type="date">
+            <label for="jumlah">Jumlah</label>
+            <input id="jumlah" type="number" placeholder="Nominal rupiah">
+            <label for="tipe">Tipe</label>
+            <select id="tipe">
+              <option value="Pemasukan">Pemasukan</option>
+              <option value="Pengeluaran">Pengeluaran</option>
+            </select>
+            <button onclick="tambahData()" class="btn btn-submit">Tambah Transaksi</button>
+          </div>
+        </article>
+      </section>
 
-<img src="https://i.pravatar.cc/100">
+      <section class="panel monthly-panel">
+        <div class="panel-header">
+          <div>
+            <h2>Rekap Bulanan</h2>
+            <p>Bandingkan pemasukan dan pengeluaran per bulan.</p>
+          </div>
+        </div>
+        <div class="filter-row">
+          <label for="monthFrom">Bulan dari</label>
+          <input id="monthFrom" type="month">
+          <label for="monthTo">Sampai</label>
+          <input id="monthTo" type="month">
+          <button class="btn btn-primary" onclick="applyMonthlyFilter()">Terapkan</button>
+          <button class="btn btn-secondary" onclick="resetMonthlyFilter()">Reset</button>
+        </div>
+        <div class="monthly-recap">
+          <div class="recap-item">
+            <span>Bulan</span>
+            <strong id="rekapBulanDisplay">-</strong>
+          </div>
+          <div class="recap-item">
+            <span>Pemasukan</span>
+            <strong id="rekapMasuk">Rp 0</strong>
+          </div>
+          <div class="recap-item">
+            <span>Pengeluaran</span>
+            <strong id="rekapKeluar">Rp 0</strong>
+          </div>
+        </div>
+        <div class="chart-box">
+          <canvas id="recapChart"></canvas>
+        </div>
+      </section>
 
-<div>
-<h3>Yusron</h3>
-<small>Finance Dashboard</small>
-</div>
-
-</div>
-
-</div>
-
-
-<div class="cards">
-
-<div class="card balance">
-
-<h3>Total Saldo</h3>
-
-<h1 id="saldo">
-Rp 0
-</h1>
-
-</div>
-
-<div class="card income">
-
-<h3>Pemasukan</h3>
-
-<h1 id="masuk">
-Rp 0
-</h1>
-
-</div>
-
-<div class="card expense">
-
-<h3>Pengeluaran</h3>
-
-<h1 id="keluar">
-Rp 0
-</h1>
-
-</div>
-
-<div class="card transaction">
-
-<h3>Transaksi</h3>
-
-<h1 id="jumlahTransaksi">
-0
-</h1>
-
-</div>
-
-</div>
-
-<div class="box">
-
-<h2>Statistik Keuangan</h2>
-
-<div class="chart-filter">
-  <label for="startDateDaily">Dari:</label>
-  <input id="startDateDaily" type="date">
-  <label for="endDateDaily">Sampai:</label>
-  <input id="endDateDaily" type="date">
-  <button onclick="applyDailyFilter()">Terapkan</button>
-  <button onclick="resetDailyFilter()">Reset</button>
-</div>
-
-<canvas id="financeChart"></canvas>
-
-</div>
-
-<div class="box">
-  <div class="box-header">
-    <h2>Rekap Bulanan</h2>
+      <section class="panel" id="riwayat">
+        <div class="panel-header">
+          <div>
+            <h2>Riwayat Transaksi</h2>
+            <p>Kelola data transaksi, edit detail, atau hapus data yang tidak diperlukan.</p>
+          </div>
+        </div>
+        <div class="filter-row table-controls">
+          <label for="startDateTable">Dari</label>
+          <input id="startDateTable" type="date">
+          <label for="endDateTable">Sampai</label>
+          <input id="endDateTable" type="date">
+          <label for="limitRecords">Tampilkan</label>
+          <input id="limitRecords" type="number" min="1" placeholder="Jumlah">
+          <button class="btn btn-primary" onclick="applyTableFilter()">Terapkan</button>
+          <button class="btn btn-secondary" onclick="resetTableFilter()">Reset</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Kategori</th>
+                <th>Keterangan</th>
+                <th>Tipe</th>
+                <th>Jumlah</th>
+                <th class="action-col">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="transaksiData"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
   </div>
-  <div class="chart-filter monthly-filter">
-    <label for="monthFrom">Bulan dari:</label>
-    <input id="monthFrom" type="month">
-    <label for="monthTo">sampai:</label>
-    <input id="monthTo" type="month">
-    <button onclick="applyMonthlyFilter()">Terapkan</button>
-    <button onclick="resetMonthlyFilter()">Reset</button>
-  </div>
-  <div class="monthly-recap">
-    <div class="recap-item">
-      <span>Bulan</span>
-      <strong id="rekapBulanDisplay">-</strong>
-    </div>
-    <div class="recap-item">
-      <span>Pemasukan</span>
-      <strong id="rekapMasuk">Rp 0</strong>
-    </div>
-    <div class="recap-item">
-      <span>Pengeluaran</span>
-      <strong id="rekapKeluar">Rp 0</strong>
-    </div>
-  </div>
-  <canvas id="recapChart"></canvas>
-</div>
 
-<div class="grid">
-
-<div class="left">
-
-<div class="box">
-
-<div class="box-header">
-  <h2>Riwayat Transaksi</h2>
-</div>
-
-<div class="table-filter">
-  <label for="startDateTable">Dari:</label>
-  <input id="startDateTable" type="date">
-  <label for="endDateTable">Sampai:</label>
-  <input id="endDateTable" type="date">
-  <label for="limitRecords">Tampilkan:</label>
-  <input id="limitRecords" type="number" min="1" placeholder="Jumlah">
-  <button onclick="applyTableFilter()">Terapkan</button>
-  <button onclick="resetTableFilter()">Reset</button>
-</div>
-
-<div class="table-responsive">
-  <table>
-    <thead>
-      <tr>
-        <th>Tanggal</th>
-        <th>Kategori</th>
-        <th>Keterangan</th>
-        <th>Tipe</th>
-        <th>Jumlah</th>
-      </tr>
-    </thead>
-    <tbody id="transaksiData"></tbody>
-  </table>
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="right">
-
-<div class="box">
-
-<h2>Tambah Transaksi</h2>
-
-<input id="kategori" placeholder="Kategori">
-
-<input id="keterangan" placeholder="Keterangan">
-
-<input id="tanggal" type="date" placeholder="Tanggal">
-
-<input id="jumlah" type="number" placeholder="Jumlah">
-
-<select id="tipe">
-
-<option value="Pemasukan">
-Pemasukan
-</option>
-
-<option value="Pengeluaran">
-Pengeluaran
-</option>
-
-</select>
-
-<button onclick="tambahData()" class="btn">
-
-Tambah
-
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<script src="dashboard.js"></script>
-
+  <script src="dashboard.js"></script>
 </body>
 </html>
