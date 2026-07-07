@@ -1,7 +1,7 @@
 const AUTH_KEY = 'masmoney_auth';
 
 if (localStorage.getItem(AUTH_KEY) !== 'true') {
-    window.location.href = 'index.html';
+    window.location.href = '/';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -14,7 +14,7 @@ window.addEventListener('DOMContentLoaded', () => {
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem(AUTH_KEY);
             localStorage.removeItem('masmoney_user');
-            window.location.href = 'index.html';
+            window.location.href = '/';
         });
     }
 });
