@@ -5,6 +5,7 @@ const connectionString = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL
 let useMemoryFallback = !connectionString;
 let pgPool = null;
 let pgConnected = false;
+let connectPromise = null;
 
 const demoPasswordHash = bcrypt.hashSync("admin123", 10);
 
@@ -162,6 +163,7 @@ async function initSchema() {
 
 const db = {
   query: async (sql, params = []) => {
+    if (connectPromise) await connectPromise;
     if (useMemoryFallback || !pgConnected) return memoryQuery(sql, params);
     try {
       return await pgPool.query(sql, params);
@@ -197,6 +199,4 @@ const db = {
 
 module.exports = db;
 
-(async () => {
-  await db.connect();
-})();
+connectPromise = db.connect();
