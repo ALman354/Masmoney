@@ -301,6 +301,7 @@ select {
 }
 
 .filter-row input,
+.filter-row select,
 .form-stack input,
 .form-stack select {
   height: 42px;
@@ -545,6 +546,7 @@ tbody tr:last-child td {
   }
 
   .filter-row input,
+  .filter-row select,
   .filter-row button {
     width: 100%;
   }
@@ -587,3 +589,219 @@ tbody tr:last-child td {
 .loading-overlay { position: fixed; inset: 0; z-index: 40; display: none; place-items: center; color: var(--ink); background: rgba(244, 247, 251, 0.72); backdrop-filter: blur(3px); font-weight: 800; }
 .loading-overlay.show { display: grid; }
 @media (max-width: 1100px) { .planning-grid, .insight-list { grid-template-columns: 1fr; } }
+@media (max-width: 640px) {
+  body {
+    background: #f4f7fb;
+  }
+
+  .sidebar {
+    padding: 14px 16px;
+    gap: 0;
+    border-radius: 0;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand-block h1 {
+    font-size: 18px;
+  }
+
+  .brand-block p {
+    font-size: 12px;
+  }
+
+  .main-content {
+    padding: 14px;
+  }
+
+  .topbar {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .eyebrow {
+    margin-bottom: 10px;
+  }
+
+  .topbar h2 {
+    font-size: 23px;
+    line-height: 1.15;
+  }
+
+  .topbar p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .profile-card {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logout-button {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  .cards,
+  .content-grid,
+  .planning-grid {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .metric-card,
+  .panel {
+    box-shadow: 0 12px 30px rgba(16, 24, 40, 0.07);
+  }
+
+  .metric-card {
+    padding: 14px;
+  }
+
+  .metric-card strong {
+    font-size: clamp(20px, 7vw, 25px);
+    overflow-wrap: anywhere;
+  }
+
+  .panel {
+    padding: 14px;
+  }
+
+  .panel-header {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .panel-header h2 {
+    font-size: 18px;
+  }
+
+  .filter-row {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .filter-row input,
+  .filter-row select,
+  .filter-row button,
+  .btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .chart-box {
+    height: 230px;
+    margin-top: 12px;
+  }
+
+  .monthly-recap,
+  .mini-list {
+    gap: 8px;
+  }
+
+  .recap-item,
+  .insight-item,
+  .mini-item {
+    padding: 12px;
+  }
+
+  .table-responsive {
+    overflow: visible;
+    border: 0;
+  }
+
+  table {
+    min-width: 0;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tbody,
+  tr,
+  td {
+    display: block;
+    width: 100%;
+  }
+
+  tbody tr {
+    margin-bottom: 10px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  tbody tr:hover {
+    background: #fff;
+  }
+
+  td {
+    display: grid;
+    grid-template-columns: 108px minmax(0, 1fr);
+    gap: 10px;
+    padding: 12px;
+    border-bottom: 1px solid var(--line);
+    overflow-wrap: anywhere;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 1px solid var(--line);
+  }
+
+  tbody tr td:last-child {
+    border-bottom: 0;
+  }
+
+  td::before {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+  }
+
+  td:nth-child(1)::before { content: "Tanggal"; }
+  td:nth-child(2)::before { content: "Kategori"; }
+  td:nth-child(3)::before { content: "Keterangan"; }
+  td:nth-child(4)::before { content: "Tipe"; }
+  td:nth-child(5)::before { content: "Jumlah"; }
+  td:nth-child(6)::before { content: "Aksi"; }
+
+  .action-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .edit,
+  .hapus {
+    width: 100%;
+  }
+
+  .empty-row {
+    display: block;
+    text-align: center;
+  }
+
+  .empty-row::before {
+    content: none;
+  }
+
+  .toast {
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    max-width: none;
+  }
+}
